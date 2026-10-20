@@ -11,7 +11,7 @@ void waiter() {
     std::string dishes[5] = {"Biriyani", "Dosa", "Parotta", "Idli", "pulavu"};
     for (int i = 0; i < 5; i++) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
-        counter.addOrder({i + 1, dishes[i]});
+        counter.addOrder({i + 1, 1, dishes[i]});
         std::cout << "Waiter placed order " << i + 1 << std::endl;                         
     }
    counter.close();
@@ -20,7 +20,7 @@ void waiter() {
 void cook(int cookId) {
     Order o;
 while (counter.takeOrder(o)) {
-    std::cout << "Cook " << cookId << " is cooking order " << o.id << ": " << o.dish << std::endl;
+    std::cout << "Cook " << cookId << " is cooking order " << o.id << ": " << o.dish << " (table " << o.table << ")" << std::endl;
 }
 std::cout << "Cook " << cookId << " goes home" << std::endl;
 }

@@ -3,5 +3,6 @@
 
 struct Order{
     int id;
+    int table;
     std::string dish;
 };
