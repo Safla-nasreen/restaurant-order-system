@@ -14,10 +14,11 @@ struct Order {
 std::queue<Order> counter;
 std::mutex m;
 std::condition_variable cv;
+bool closed = false;
 
 void waiter() {
-    std::string dishes[4] = {"Biriyani", "Dosa", "Parotta", "Idli"};
-    for (int i = 0; i < 4; i++) {
+    std::string dishes[5] = {"Biriyani", "Dosa", "Parotta", "Idli", "pulavu"};
+    for (int i = 0; i < 5; i++) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
         {
             std::lock_guard<std::mutex> lock(m);   
@@ -26,17 +27,24 @@ void waiter() {
         }
         cv.notify_one();                          
     }
+   std::lock_guard<std::mutex> lock(m);
+   closed = true;
+   cv.notify_all();
 }
 
 void cook(int cookId) {
-    for (int i = 0; i < 2; i++) {
+    while(true) {
         std::unique_lock<std::mutex> lock(m);       
-        while (counter.empty()) {                      
+        while (counter.empty() && !closed) {                      
             cv.wait(lock);
         }
+        if (counter.empty() && closed) {
+            std::cout << "Cook " << cookId << " goes home" << std::endl;
+            break;
+        }    
         Order o = counter.front();
         counter.pop();
-        std::cout <<"Cook: "<<cookId<< "is cooking order " << o.id << ": " << o.dish << std::endl;
+        std::cout <<"Cook: "<<cookId<< " is cooking order " << o.id << ": " << o.dish << std::endl;
     }
 }
 

@@ -56,13 +56,12 @@ I chose this after starting with several files too early: a single file let me u
 | REQ-003 | A cook with no order waits without using CPU (no busy-waiting). | Cooks sleep on a condition variable and wake when an order arrives. | Implemented (main.cpp prototype) |
 | REQ-004 | Orders are taken in first-in, first-out order. | Order 1 is taken before order 2, and so on. | Implemented (main.cpp prototype) |
 | REQ-005 | Each output line shows which cook cooks which order. | Output like `Cook 1 is cooking order 1: Biriyani`. | Implemented (main.cpp prototype) |
-| REQ-006 | Clean shutdown at closing time: cooks finish remaining orders and exit without a fixed order count. | The program always ends; all threads are joined; no order is left on the counter. | Planned |
+| REQ-006 | Clean shutdown at closing time: cooks finish remaining orders and exit without a fixed order count. | The program always ends; all threads are joined; no order is left on the counter. | Implemented (main.cpp prototype) |
 | REQ-007 | The counter logic is a reusable thread-safe class (`OrderQueue`). | `main.cpp` uses only `addOrder`, `takeOrder` and `close`; the mutex is hidden inside the class. | In Progress (`include/OrderQueue.h` declared; `src/OrderQueue.cpp` not written yet) |
 | REQ-008 | The project builds with CMake using C++17 and links the thread library. | `cmake` + `make` builds from a clean folder with no errors. | Planned |
 | REQ-009 | Core behaviour is covered by automated tests (Google Test). | Tests for REQ-001, 002, 004 and 006 pass. | Planned |
 
-**Known limitation (current prototype):** each cook takes a fixed number of orders (2 each, 4 in total).
-If the numbers don't match, the program waits forever. REQ-006 removes this limitation.
+**Known limitation (current prototype):** Fixed by REQ-006: cooks now stop when the counter is empty and closed, with no fixed order count. Verified manually with 5 orders and 2 cooks.
 
 **Evidence:** this table; `main.cpp` for the Implemented rows.
 
