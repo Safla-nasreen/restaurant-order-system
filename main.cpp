@@ -2,15 +2,16 @@
 #include <string>
 #include <thread>
 #include <chrono>
+#include<vector>
 #include"Order.h"
 #include "OrderQueue.h"
 
 OrderQueue counter;
-const std::string MENU[10] = {"Biriyani", "Dosa", "Parotta", "Idli", "Pulavu","Mandhi","Chappathi","Butter chicken", "Alfahm","Vegitable curry"};
+const std::vector<std::string> MENU = {"Biriyani", "Dosa", "Parotta", "Idli", "Pulavu","Mandhi","Chappathi","Butter chicken", "Alfahm","Vegitable curry"};
 
 void showMenu() {
     std::cout << "------ MENU ------" << std::endl;
-    for (int i = 0; i < 10; i++) {
+    for (size_t i = 0; i < MENU.size(); i++) {
         std::cout << i + 1 << ". " << MENU[i] << std::endl;
     }
     std::cout << "------------------" << std::endl;
