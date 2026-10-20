@@ -5,11 +5,7 @@
 #include <mutex>
 #include <condition_variable>        // 1. the bell's header
 #include <chrono>
-
-struct Order {
-    int id;
-    std::string dish;
-};
+#include"Order.h"
 
 std::queue<Order> counter;
 std::mutex m;
