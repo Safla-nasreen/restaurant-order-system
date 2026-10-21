@@ -22,6 +22,7 @@ void waiter()
 {
     showMenu();
     int table;
+    int nextId = 1; 
     while (true)
     {
         std::cout << "Table number? (0 = close): ";
@@ -30,7 +31,19 @@ void waiter()
         {
             break;
         }
-        std::cout << "Waiter is at table " << table << std::endl;
+        int choice;
+        while (true)
+        {
+            std::cout << "Dish number for table " << table << "? (0 = done): ";
+            std::cin >> choice;
+            if (choice == 0)
+            {
+                break;
+            }
+            counter.addOrder({nextId, table, MENU[choice-1]});
+            std::cout << "Waiter placed order " << nextId << std::endl;
+            nextId++; 
+        }
     }
     counter.close();
 }
