@@ -6,7 +6,7 @@
 
 class OrderQueue{
     public:
-    void addOrder(const Order& order);  
+    bool addOrder(const Order& order);  
     bool takeOrder(Order& order);       
     void close();                      
 

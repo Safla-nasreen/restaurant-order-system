@@ -60,10 +60,14 @@ I chose this after starting with several files too early: a single file let me u
 | REQ-007 | The counter logic is a reusable thread-safe class (`OrderQueue`). | `main.cpp` uses only `addOrder`, `takeOrder` and `close`; the mutex is hidden inside the class. | Implemented (include/OrderQueue.h, src/OrderQueue.cpp) |
 | REQ-008 | The project builds with CMake using C++17 and links the thread library. | `cmake` + `make` builds from a clean folder with no errors. | Planned |
 | REQ-009 | Core behaviour is covered by automated tests (Google Test). | Tests for REQ-001, 002, 004 and 006 pass. | Planned |
+| REQ-010 | Tables order from a menu. | The menu is shown; the waiter asks for a table number (0 = close), then that table's dishes (0 = done); each dish becomes an order with its table number; an invalid dish number shows "Invalid choice" and places no order; cooks cook while the next table is still ordering. | Implemented (manual runs, 21 Oct) |
+| REQ-011 | No orders are accepted after closing. | `addOrder` refuses an order once `close()` has been called. | Implemented (manual runs, 21 Oct) |
 
 **Known limitation (current prototype):** Fixed by REQ-006: cooks now stop when the counter is empty and closed, with no fixed order count. Verified manually with 5 orders and 2 cooks.
 
 **Known limitation:** console output (`std::cout`) happens outside the lock, so lines printed by different threads could occasionally mix on screen. The order data itself is always protected inside `OrderQueue`.
+
+**Known limitation:** the waiter reads numbers with `std::cin`; typing letters instead of a number is not handled yet.
 
 **Evidence:** this table; `main.cpp` for the Implemented rows.
 
