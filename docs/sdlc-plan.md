@@ -58,7 +58,7 @@ I chose this after starting with several files too early: a single file let me u
 | REQ-005 | Each output line shows which cook cooks which order. | Output like `Cook 1 is cooking order 1: Biriyani`. | Implemented (main.cpp prototype) |
 | REQ-006 | Clean shutdown at closing time: cooks finish remaining orders and exit without a fixed order count. | The program always ends; all threads are joined; no order is left on the counter. | Implemented (main.cpp prototype) |
 | REQ-007 | The counter logic is a reusable thread-safe class (`OrderQueue`). | `main.cpp` uses only `addOrder`, `takeOrder` and `close`; the mutex is hidden inside the class. | Implemented (include/OrderQueue.h, src/OrderQueue.cpp) |
-| REQ-008 | The project builds with CMake using C++17 and links the thread library. | `cmake` + `make` builds from a clean folder with no errors. | Planned |
+| REQ-008 | The project builds with CMake using C++17 and links the thread library. | `cmake` + `make` builds from a clean folder with no errors. | Implemented (cmake + build + run verified, 21 Oct) |
 | REQ-009 | Core behaviour is covered by automated tests (Google Test). | Tests for REQ-001, 002, 004 and 006 pass. | Planned |
 | REQ-010 | Tables order from a menu. | The menu is shown; the waiter asks for a table number (0 = close), then that table's dishes (0 = done); each dish becomes an order with its table number; an invalid dish number shows "Invalid choice" and places no order; cooks cook while the next table is still ordering. | Implemented (manual runs, 21 Oct) |
 | REQ-011 | No orders are accepted after closing. | `addOrder` refuses an order once `close()` has been called. | Implemented (manual runs, 21 Oct) |
@@ -140,7 +140,7 @@ I chose this after starting with several files too early: a single file let me u
 
 **Activities:** add `CMakeLists.txt` and `.gitignore` (ignore `build/` and the compiled `restaurant` program); write `README.md` with an overview, features, design summary, build steps and test steps; push to GitHub; tag `v1.0`.
 
-**Evidence:** currently built by hand with `g++ main.cpp -o restaurant -pthread`.
+**Evidence:** `CMakeLists.txt` (C++17, Threads::Threads). Build: `cmake -S . -B build` then `cmake --build build`; run: `./build/restaurant`.
 
 **Status:** Planned
 
