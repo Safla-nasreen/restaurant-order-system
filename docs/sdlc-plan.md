@@ -12,7 +12,7 @@ It is updated whenever the real status of the project changes.
 | Implemented | Code works when run manually, but has no automated test yet |
 | Tested | Covered by an automated test that passes |
 
-Last updated: 20 Oct 2026
+Last updated: 24 Oct 2026
 
 ---
 
@@ -51,17 +51,17 @@ I chose this after starting with several files too early: a single file let me u
 
 | ID | Requirement | Acceptance criteria | Status |
 |---|---|---|---|
-| REQ-001 | The waiter places orders (id + dish) on a shared counter. | Every order placed appears on the counter, in the order placed. | Implemented (main.cpp prototype) |
+| REQ-001 | The waiter places orders (id + dish) on a shared counter. | Every order placed appears on the counter, in the order placed. | Tested (TEST-001, 24 Oct) |
 | REQ-002 | Two or more cooks take orders from the counter at the same time. | Each order is cooked exactly once; no order is lost or cooked twice. | Implemented (main.cpp prototype, 2 cooks) |
 | REQ-003 | A cook with no order waits without using CPU (no busy-waiting). | Cooks sleep on a condition variable and wake when an order arrives. | Implemented (main.cpp prototype) |
 | REQ-004 | Orders are taken in first-in, first-out order. | Order 1 is taken before order 2, and so on. | Implemented (main.cpp prototype) |
 | REQ-005 | Each output line shows which cook cooks which order. | Output like `Cook 1 is cooking order 1: Biriyani`. | Implemented (main.cpp prototype) |
-| REQ-006 | Clean shutdown at closing time: cooks finish remaining orders and exit without a fixed order count. | The program always ends; all threads are joined; no order is left on the counter. | Implemented (main.cpp prototype) |
+| REQ-006 | Clean shutdown at closing time: cooks finish remaining orders and exit without a fixed order count. | The program always ends; all threads are joined; no order is left on the counter. | Implemented; stop signal tested (TEST-003, 24 Oct)|
 | REQ-007 | The counter logic is a reusable thread-safe class (`OrderQueue`). | `main.cpp` uses only `addOrder`, `takeOrder` and `close`; the mutex is hidden inside the class. | Implemented (include/OrderQueue.h, src/OrderQueue.cpp) |
 | REQ-008 | The project builds with CMake using C++17 and links the thread library. | `cmake` + `make` builds from a clean folder with no errors. | Implemented (cmake + build + run verified, 21 Oct) |
-| REQ-009 | Core behaviour is covered by automated tests (Google Test). | Tests for REQ-001, 002, 004 and 006 pass. | Planned |
+| REQ-009 | Core behaviour is covered by automated tests (Google Test). | Tests for REQ-001, 002, 004 and 006 pass. | In Progress (3 tests pass; REQ-002 and REQ-004 not tested yet) |
 | REQ-010 | Tables order from a menu. | The menu is shown; the waiter asks for a table number (0 = close), then that table's dishes (0 = done); each dish becomes an order with its table number; an invalid dish number shows "Invalid choice" and places no order; cooks cook while the next table is still ordering. | Implemented (manual runs, 21 Oct) |
-| REQ-011 | No orders are accepted after closing. | `addOrder` refuses an order once `close()` has been called. | Implemented (manual runs, 21 Oct) |
+| REQ-011 | No orders are accepted after closing. | `addOrder` refuses an order once `close()` has been called. | Tested (TEST-002, 24 Oct) |
 
 **Known limitation (current prototype):** Fixed by REQ-006: cooks now stop when the counter is empty and closed, with no fixed order count. Verified manually with 5 orders and 2 cooks.
 
@@ -126,9 +126,9 @@ I chose this after starting with several files too early: a single file let me u
 - Cook wait condition was reversed (`while (!counter.empty())`), so the cook read from an empty queue and the program aborted. Fixed.
 - Cook loop count didn't match the number of orders, so the program never ended. Fixed for now; REQ-006 fixes the root cause.
 
-**Evidence:** manual runs only so far.
+**Evidence:** tests/test_order_queue.cpp (3 Google Tests pass, 24 Oct); build with cmake --build build, run ./build/tests.
 
-**Status:** Planned (no automated tests yet)
+**Status:** In Progress
 
 **Done when:** every requirement has at least one passing test, and the results are recorded honestly.
 
