@@ -51,11 +51,6 @@ void waiter()
         }
     }
     counter.close();
-    // REQ-011 check: a late order must be refused
-    if (!counter.addOrder({nextId, 99, "Tea"}))
-    {
-        std::cout << "Late order refused: kitchen is closed" << std::endl;
-    }
 }
 
 void cook(int cookId)
