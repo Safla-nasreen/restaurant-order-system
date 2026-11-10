@@ -3,10 +3,12 @@
 #include <thread>
 #include <chrono>
 #include <vector>
+#include <mutex>
 #include "Order.h"
 #include "OrderQueue.h"
 
 OrderQueue counter;
+std::mutex printMutex;
 const std::vector<std::string> MENU = {"Biriyani", "Dosa", "Parotta", "Idli", "Pulavu", "Mandhi", "Chappathi", "Butter chicken", "Alfahm", "Vegitable curry"};
 
 void showMenu()
@@ -42,11 +44,17 @@ void waiter()
             }
             if (choice < 0 || choice > (int)MENU.size())
             {
-                std::cout << "Invalid choice" << std::endl;
+                {
+                    std::lock_guard<std::mutex> lock(printMutex);
+                    std::cout << "Invalid choice" << std::endl;
+                }
                 continue;
             }
             counter.addOrder({nextId, table, MENU[choice - 1]});
-            std::cout << "Waiter placed order " << nextId << std::endl;
+            {
+                std::lock_guard<std::mutex> lock(printMutex);
+                std::cout << "Waiter placed order " << nextId << std::endl;
+            }
             nextId++;
         }
     }
@@ -58,9 +66,13 @@ void cook(int cookId)
     Order o;
     while (counter.takeOrder(o))
     {
+        std::lock_guard<std::mutex> lock(printMutex);
         std::cout << "Cook " << cookId << " is cooking order " << o.id << ": " << o.dish << " (table " << o.table << ")" << std::endl;
     }
-    std::cout << "Cook " << cookId << " goes home" << std::endl;
+    {
+        std::lock_guard<std::mutex> lock(printMutex);
+        std::cout << "Cook " << cookId << " goes home" << std::endl;
+    }
 }
 
 int main()
