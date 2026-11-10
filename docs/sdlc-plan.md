@@ -141,9 +141,9 @@ I chose this after starting with several files too early: a single file let me u
 
 **Activities:** add `CMakeLists.txt` and `.gitignore` (ignore `build/` and the compiled `restaurant` program); write `README.md` with an overview, features, design summary, build steps and test steps; push to GitHub; tag `v1.0`.
 
-**Evidence:** `CMakeLists.txt` (C++17, Threads::Threads). Build: `cmake -S . -B build` then `cmake --build build`; run: `./build/restaurant`.
+**Evidence:** `CMakeLists.txt` (C++17, Threads::Threads). Build: `cmake -S . -B build` then `cmake --build build`; run: `./build/restaurant`. Fresh-clone check (10 Nov): cloned into a new folder, followed only the README; build passed, program ran and ended cleanly, 3 of 3 tests passed.
 
-**Status:** Planned
+**Status:** Done (10 Nov); tagged `v1.0`
 
 **Done when:** a fresh clone builds and runs by following only the README.
 
