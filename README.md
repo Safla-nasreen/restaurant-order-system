@@ -41,7 +41,7 @@ Expected result: `[  PASSED  ] 3 tests.`
 
 ## Known limitations
 
-- Console output (`std::cout`) is printed outside the lock, so lines from different threads can occasionally mix on screen. The order data itself is always protected.
+- A cook's message can appear right after an input prompt on the same line, because the prompt waits for typing without a line break. (Lines from different threads no longer mix: each print holds a print mutex.)
 - Typing letters instead of a number at the menu is not handled yet.
 
 More details: [SDLC plan](docs/sdlc-plan.md)

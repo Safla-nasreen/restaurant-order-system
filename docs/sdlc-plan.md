@@ -63,9 +63,9 @@ I chose this after starting with several files too early: a single file let me u
 | REQ-010 | Tables order from a menu. | The menu is shown; the waiter asks for a table number (0 = close), then that table's dishes (0 = done); each dish becomes an order with its table number; an invalid dish number shows "Invalid choice" and places no order; cooks cook while the next table is still ordering. | Implemented (manual runs, 21 Oct) |
 | REQ-011 | No orders are accepted after closing. | `addOrder` refuses an order once `close()` has been called. | Tested (TEST-002, 24 Oct) |
 
-**Known limitation (current prototype):** Fixed by REQ-006: cooks now stop when the counter is empty and closed, with no fixed order count. Verified manually with 5 orders and 2 cooks.
+**Fixed by REQ-006:** cooks now stop when the counter is empty and closed, with no fixed order count. Verified manually with 5 orders and 2 cooks.
 
-**Known limitation:** console output (`std::cout`) happens outside the lock, so lines printed by different threads could occasionally mix on screen. The order data itself is always protected inside `OrderQueue`.
+**Fixed (10 Nov):** console output used to happen outside any lock, so lines from different threads could mix on screen (seen: "Cook Cook 2 goes home / 1 goes home"). Each output line now holds a separate `printMutex` in `main.cpp`. A cook's line can still appear right after an input prompt, because the prompt waits for typing without a line break; that is cosmetic.
 
 **Known limitation:** the waiter reads numbers with `std::cin`; typing letters instead of a number is not handled yet.
 
@@ -125,6 +125,7 @@ I chose this after starting with several files too early: a single file let me u
 **Bugs found so far during manual runs (to be recorded in the defect log):**
 - Cook wait condition was reversed (`while (!counter.empty())`), so the cook read from an empty queue and the program aborted. Fixed.
 - Cook loop count didn't match the number of orders, so the program never ended. Fixed for now; REQ-006 fixes the root cause.
+- Console lines from different threads could mix on screen. Fixed with a print mutex (10 Nov).
 
 **Evidence:** tests/test_order_queue.cpp (3 Google Tests pass, 24 Oct); build with cmake --build build, run ./build/tests.
 
